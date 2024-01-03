@@ -2,6 +2,7 @@ const express=require('express')
 const app=express()
 const dbConnection=require("./Config/dbConfig")
 const cors=require("cors")
+const logger = require("morgan");
 require('dotenv').config()
 const userRouters=require("./Routers/userRouters")
 
