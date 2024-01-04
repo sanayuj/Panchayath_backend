@@ -2,6 +2,7 @@ const userModel = require("../Model/userModel");
 const { json, response } = require("express");
 const jwt = require("jsonwebtoken");
 const maxAge = 3 * 24 * 60 * 60;
+const bcrypt=require("bcrypt")
 
 //JWT
 const createToken = (id) => {
@@ -43,3 +44,26 @@ module.exports.Signup = async (req, res, next) => {
   return  res.json({ message: "Internal server error in sign up", status: false });
   }
 };
+
+//LOGIN
+module.exports.login=async(req,res,next)=>{
+const {phoneNumber,password}=req.body
+    try{
+        const user=await userModel.findOne({phoneNumber})
+       
+    if(user){
+        const matchPassword=await bcrypt.compare(password,user.password)
+        if(matchPassword){
+          const token=createToken(user._id)
+         return res.json({message:"Login successfully",user:user,status:true,token})
+        }else{
+          return res.json({message:"Invaild password",status:false})
+        }
+    }else{
+      return res.json({message:"User not found",status:false})
+    }
+    }catch(error){
+      console.log(error);
+      return  res.json({message:"Internal server in login",status:false})
+    }
+}
