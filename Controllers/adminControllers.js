@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const maxAge = 3 * 24 * 60 * 60;
 const adminModel = require("../Model/adminModel");
 const userModel = require("../Model/userModel");
+const certificateModel=require("../Model/certifivcateModel")
+const certRequirementModel=require("../Model/certRequirementModel")
 const createAdminToken = (id) => {
   return jwt.sign({ id }, "adminJWT", {
     expiresIn: maxAge,
@@ -86,4 +88,32 @@ console.log(userId,"Hiii");
   console.log(error);
   return res.json({message:"Internal server in block user",status:false})
 }
+}
+
+
+module.exports.addCertificate=async(req,res,next)=>{
+  try{
+console.log(req.body);
+const newCertificate=new certificateModel({
+  certificateName:req.body.certName
+})
+await newCertificate.save()
+return res.json({message:"Certificate Added successfully",status:true})
+  }catch(error){
+    res.json({message:"Internal server error in add certificate",status:false})
+  }
+}
+
+module.exports.addCertificateRequirement=async(req,res,next)=>{
+  const {certRequirement,certificateName}=req.body
+  try{
+    const certRequirementDetails=new certRequirementModel({
+      certificateName:certificateName,
+      Requirements:certRequirement
+    })
+    await certRequirementDetails.save()
+    return res.json({message:"Form submitted successfully",status:true})
+  }catch(error){
+    return res.json({message:"Internal server error in add requirement",status:false})
+  }
 }
