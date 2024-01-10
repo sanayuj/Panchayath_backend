@@ -1,4 +1,4 @@
-const certifivcateModel=require("../Model/certifivcateModel")
+const certifivcateModel=require("../Model/certificateModel")
 
 
 

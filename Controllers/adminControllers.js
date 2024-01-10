@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const maxAge = 3 * 24 * 60 * 60;
 const adminModel = require("../Model/adminModel");
 const userModel = require("../Model/userModel");
-const certificateModel=require("../Model/certifivcateModel")
+const certificateModel=require("../Model/certificateModel")
 const certRequirementModel=require("../Model/certRequirementModel")
 const createAdminToken = (id) => {
   return jwt.sign({ id }, "adminJWT", {
@@ -105,10 +105,11 @@ return res.json({message:"Certificate Added successfully",status:true})
 }
 
 module.exports.addCertificateRequirement=async(req,res,next)=>{
-  const {certRequirement,certificateName}=req.body
+  const {certRequirement,certificateId,certificateName}=req.body
   try{
     const certRequirementDetails=new certRequirementModel({
       certificateName:certificateName,
+      certificateId:certificateId,
       Requirements:certRequirement
     })
     await certRequirementDetails.save()

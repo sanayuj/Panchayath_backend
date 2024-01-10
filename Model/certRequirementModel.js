@@ -8,6 +8,10 @@ const certificateRequirementSchema=new mongoose.Schema({
  Requirements:{
     type:String,
     required:true
+ },
+ certificateId:{
+    type:String,
+    required:true
  }
 })
 

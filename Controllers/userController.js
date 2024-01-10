@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const maxAge = 3 * 24 * 60 * 60;
 const bcrypt = require("bcrypt");
 const path = require("path");
+const certRequirementModel = require("../Model/certRequirementModel");
 
 //JWT
 const createToken = (id) => {
@@ -119,3 +120,15 @@ module.exports.Complaint = async (req, res, next) => {
     });
   }
 };
+
+
+module.exports.fetchSelectedCertDetails=async(req,res,next)=>{
+  try{
+    const certificateId=req.params.certId
+    const certificateDetails=await certRequirementModel.find({certificateId})
+    return res.json({status:true,certDetails:certificateDetails})
+
+  }catch(error){
+    return res.json({message:"Internal server error in fetech document details",status:false})
+  }
+}
