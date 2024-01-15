@@ -146,7 +146,7 @@ module.exports.applyCertificate = async (req, res, next) => {
       return imageUrl;
     };
     const appliedCert = new appliedCertModel({
-      dom: req.body.dateOfBrith,
+      dob: req.body.dateOfBrith,
       nameOfFather: req.body.nameOfFather,
       nameOfMother: req.body.nameOfMother,
       address: req.body.permanentAddress,

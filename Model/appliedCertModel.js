@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const appliedBrithCertSchema = new mongoose.Schema({
-  dom: {
+  dob: {
     type: String,
      required: true,
    
@@ -46,7 +46,7 @@ const appliedBrithCertSchema = new mongoose.Schema({
   certName:{
     type:String,
     required:true
-    
+
   }
 });
 
