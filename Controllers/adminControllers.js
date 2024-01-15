@@ -6,6 +6,7 @@ const adminModel = require("../Model/adminModel");
 const userModel = require("../Model/userModel");
 const certificateModel=require("../Model/certificateModel")
 const certRequirementModel=require("../Model/certRequirementModel")
+const appliedBrithCertModel=require("../Model/appliedCertModel")
 const createAdminToken = (id) => {
   return jwt.sign({ id }, "adminJWT", {
     expiresIn: maxAge,
@@ -121,7 +122,12 @@ module.exports.addCertificateRequirement=async(req,res,next)=>{
 
 module.exports.fetchAppliedCertificate=async(req,res,next)=>{
   try{
-
+    const appliedBrithCert=await appliedBrithCertModel.find({})
+    console.log(appliedBrithCert,")))");
+    if(appliedBrithCert){
+      return res.json({data:appliedBrithCert,status:true})
+    }
+    return res.json({message:"No certificate details"})
   }catch(error){
     res.json({message:"Internal server error in fetch applied certificate",status:false})
   }

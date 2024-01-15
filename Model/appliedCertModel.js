@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const appliedCertSchema = new mongoose.Schema({
+const appliedBrithCertSchema = new mongoose.Schema({
   dom: {
     type: String,
      required: true,
@@ -38,6 +38,16 @@ const appliedCertSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  userId:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+    required: true
+  },
+  certName:{
+    type:String,
+    required:true
+    
+  }
 });
 
-module.exports = new mongoose.model("appliedCert", appliedCertSchema);
+module.exports = new mongoose.model("appliedBrithCert", appliedBrithCertSchema);

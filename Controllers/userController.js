@@ -153,13 +153,18 @@ module.exports.applyCertificate = async (req, res, next) => {
       state: req.body.state,
       post: req.body.post,
       addressProofImage: extractImageUrl(req.file.path),
-      brithLocation:req.body.locationOfBrith
+      brithLocation: req.body.locationOfBrith,
+      userId: req.body.userId,
+      certName: "Brith Certificate",
     });
 
-    await appliedCert.save()
-    return res.json({message:"Form submitted successfully",status:true})
+    await appliedCert.save();
+    return res.json({ message: "Form submitted successfully", status: true });
   } catch (error) {
-console.log(error);
-    res.json({ message: "Internal server error in apply certificate" ,status:false});
+    console.log(error);
+    res.json({
+      message: "Internal server error in apply certificate",
+      status: false,
+    });
   }
 };
