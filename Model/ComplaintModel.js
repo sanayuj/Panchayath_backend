@@ -26,8 +26,12 @@ complaintTopic:{
     type:Object,
     required:true
 },
+date: {
+    type: Date,
+    default: Date.now,
 
-})
+}}
+)
 
 
 module.exports = new mongoose.model("userCompliant", ComplaintSchema);

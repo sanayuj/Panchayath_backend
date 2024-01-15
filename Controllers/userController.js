@@ -1,5 +1,6 @@
 const userModel = require("../Model/userModel");
 const complaintModel = require("../Model/ComplaintModel");
+const appliedCertModel = require("../Model/appliedCertModel");
 const { json, response } = require("express");
 const jwt = require("jsonwebtoken");
 const maxAge = 3 * 24 * 60 * 60;
@@ -121,14 +122,44 @@ module.exports.Complaint = async (req, res, next) => {
   }
 };
 
-
-module.exports.fetchSelectedCertDetails=async(req,res,next)=>{
-  try{
-    const certificateId=req.params.certId
-    const certificateDetails=await certRequirementModel.find({certificateId})
-    return res.json({status:true,certDetails:certificateDetails})
-
-  }catch(error){
-    return res.json({message:"Internal server error in fetech document details",status:false})
+module.exports.fetchSelectedCertDetails = async (req, res, next) => {
+  try {
+    const certificateId = req.params.certId;
+    const certificateDetails = await certRequirementModel.find({
+      certificateId,
+    });
+    return res.json({ status: true, certDetails: certificateDetails });
+  } catch (error) {
+    return res.json({
+      message: "Internal server error in fetech document details",
+      status: false,
+    });
   }
-}
+};
+
+module.exports.applyCertificate = async (req, res, next) => {
+  try {
+    console.log(req.body, "$$$");
+    const extractImageUrl = (fullPath) => {
+      const relativePath = path.relative("public/images", fullPath);
+      const imageUrl = relativePath.replace(/\\/g, "/");
+      return imageUrl;
+    };
+    const appliedCert = new appliedCertModel({
+      dom: req.body.dateOfBrith,
+      nameOfFather: req.body.nameOfFather,
+      nameOfMother: req.body.nameOfMother,
+      address: req.body.permanentAddress,
+      state: req.body.state,
+      post: req.body.post,
+      addressProofImage: extractImageUrl(req.file.path),
+      brithLocation:req.body.locationOfBrith
+    });
+
+    await appliedCert.save()
+    return res.json({message:"Form submitted successfully",status:true})
+  } catch (error) {
+console.log(error);
+    res.json({ message: "Internal server error in apply certificate" ,status:false});
+  }
+};

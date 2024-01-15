@@ -1,5 +1,5 @@
 const express=require("express");
-const { adminLogin, adminHeader, userList, blockuser, addCertificate, addCertificateRequirement } = require("../Controllers/adminControllers");
+const { adminLogin, adminHeader, userList, blockuser, addCertificate, addCertificateRequirement, fetchAppliedCertificate } = require("../Controllers/adminControllers");
 const adminAuth = require("../Middleware/adminAuth");
 const { fetchAllCertificate } = require("../Controllers/certificateController");
 const router=express.Router()
@@ -20,7 +20,7 @@ router.post("/addrequirement",adminAuth,addCertificateRequirement)
 router.get("/adminHeader",adminAuth,adminHeader)
 router.get("/userList",adminAuth,userList)
 router.get("/fetchAllCertificate",adminAuth,fetchAllCertificate)
-
+router.get("/fetchAppliedCert",adminAuth,fetchAppliedCertificate)
 
 
 module.exports = router;

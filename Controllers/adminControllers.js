@@ -118,3 +118,11 @@ module.exports.addCertificateRequirement=async(req,res,next)=>{
     return res.json({message:"Internal server error in add requirement",status:false})
   }
 }
+
+module.exports.fetchAppliedCertificate=async(req,res,next)=>{
+  try{
+
+  }catch(error){
+    res.json({message:"Internal server error in fetch applied certificate",status:false})
+  }
+}
