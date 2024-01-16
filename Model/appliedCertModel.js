@@ -46,8 +46,13 @@ const appliedBrithCertSchema = new mongoose.Schema({
   certName:{
     type:String,
     required:true
+  },
+  certStatus:{
+    type:Boolean,
+    Default:false,
 
   }
+  
 });
 
 module.exports = new mongoose.model("appliedBrithCert", appliedBrithCertSchema);
