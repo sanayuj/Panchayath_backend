@@ -1,6 +1,6 @@
 const express=require("express")
 const router=express.Router()
-const { Signup, login, userHeader, Complaint, fetchSelectedCertDetails, applyCertificate} =require("../Controllers/userController")
+const { Signup, login, userHeader, Complaint, fetchSelectedCertDetails, applyCertificate, fetchUserAppliedCert} =require("../Controllers/userController")
 const userAuth = require("../Middleware/userAuth")
 const createMulterInstance = require("../Middleware/multer")
 const { fetchAllCertificate } = require("../Controllers/certificateController")
@@ -17,5 +17,6 @@ router.post("/applyCertificate",userAuth,uploadAddressProof.single("addressProof
 router.get("/userheader",userAuth,userHeader)
 router.get("/fetchAllCertificate",fetchAllCertificate)
 router.get("/fetchCertRequiredDetails/:certId",fetchSelectedCertDetails)
+router.get(`/fetchUserAppliedCert/:userId`,userAuth,fetchUserAppliedCert)
 
 module.exports = router;

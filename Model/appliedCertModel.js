@@ -49,7 +49,7 @@ const appliedBrithCertSchema = new mongoose.Schema({
   },
   certStatus:{
     type:Boolean,
-    Default:false,
+    default:false,
 
   }
   

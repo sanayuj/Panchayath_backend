@@ -168,3 +168,20 @@ module.exports.applyCertificate = async (req, res, next) => {
     });
   }
 };
+
+
+module.exports.fetchUserAppliedCert=async(req,res,next)=>{
+  try{
+    const userId=req.params.userId
+    console.log(userId,"%%%%%&&&&&");
+    const userCert=await appliedCertModel.find({userId:userId})
+    if(userCert){
+      return res.json({data:userCert,status:true})
+    }else{
+      return res.json({status:false,message:"No certificate found"})
+    }
+  }catch(error){
+    console.log(error);
+    return res.json({message:"Internal server error in applied user cert",status:false})
+  }
+}
