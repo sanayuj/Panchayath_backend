@@ -125,6 +125,7 @@ module.exports.Complaint = async (req, res, next) => {
 module.exports.fetchSelectedCertDetails = async (req, res, next) => {
   try {
     const certificateId = req.params.certId;
+    console.log(certificateId,"@@@");
     const certificateDetails = await certRequirementModel.find({
       certificateId,
     });
@@ -185,3 +186,18 @@ module.exports.fetchUserAppliedCert=async(req,res,next)=>{
     return res.json({message:"Internal server error in applied user cert",status:false})
   }
 }
+
+module.exports.viewBrithCertDetails = async (req, res, next) => {
+  try {
+    const certificateId = req.params.certId;
+    const certificateDetails = await appliedCertModel.find({
+      _id:certificateId
+    });
+    return res.json({ status: true, certDetails: certificateDetails });
+  } catch (error) {
+    return res.json({
+      message: "Internal server error in fetech document details",
+      status: false,
+    });
+  }
+};

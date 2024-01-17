@@ -185,7 +185,7 @@ module.exports.verifyCertificate = async (req, res, next) => {
         { $set: { certStatus: true } }
       );
     }
-    return res.json({ message: "Verified successfully", status: true });
+    return res.json({ message: "Verified successfully", status: true,details:specificCert });
   } catch (error) {
     return res.json({
       message: "Internal server in verify cerificate",

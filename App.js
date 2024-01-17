@@ -17,6 +17,8 @@ dbConnection.dbConnection()
 app.use(logger("dev"))
 app.use(express.json())
 
+app.use("/img", express.static(__dirname + "/public/images"));
+
 //Router path
 app.use("/",userRouters)
 app.use("/admin",adminRouters)
