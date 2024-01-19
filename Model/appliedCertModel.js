@@ -6,6 +6,14 @@ const appliedBrithCertSchema = new mongoose.Schema({
      required: true,
    
   },
+  childName:{
+    required: true,
+    type: String
+  },
+  hospitalName:{
+    required: true,
+    type: String
+  },
   nameOfFather: {
     required: true,
     type: String

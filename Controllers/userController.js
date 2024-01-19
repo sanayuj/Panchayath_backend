@@ -140,6 +140,8 @@ module.exports.fetchSelectedCertDetails = async (req, res, next) => {
 
 module.exports.applyCertificate = async (req, res, next) => {
   try {
+    
+    
     console.log(req.body, "$$$");
     const extractImageUrl = (fullPath) => {
       const relativePath = path.relative("public/images", fullPath);
@@ -148,6 +150,8 @@ module.exports.applyCertificate = async (req, res, next) => {
     };
     const appliedCert = new appliedCertModel({
       dob: req.body.dateOfBrith,
+      childName:req.body.childName,
+      hospitalName:req.body.hospitalName,
       nameOfFather: req.body.nameOfFather,
       nameOfMother: req.body.nameOfMother,
       address: req.body.permanentAddress,

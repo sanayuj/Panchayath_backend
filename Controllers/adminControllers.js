@@ -6,6 +6,7 @@ const userModel = require("../Model/userModel");
 const certificateModel = require("../Model/certificateModel");
 const certRequirementModel = require("../Model/certRequirementModel");
 const appliedBrithCertModel = require("../Model/appliedCertModel");
+const complaintModel = require("../Model/ComplaintModel");
 const createAdminToken = (id) => {
   return jwt.sign({ id }, "adminJWT", {
     expiresIn: maxAge,
@@ -51,6 +52,7 @@ module.exports.adminHeader = async (req, res, next) => {
 module.exports.userList = async (req, res, next) => {
   try {
     const userDetails = await userModel.find({});
+
     if (userDetails) {
       return res.json({ userDetails, status: true });
     } else {
@@ -185,7 +187,11 @@ module.exports.verifyCertificate = async (req, res, next) => {
         { $set: { certStatus: true } }
       );
     }
-    return res.json({ message: "Verified successfully", status: true,details:specificCert });
+    return res.json({
+      message: "Verified successfully",
+      status: true,
+      details: specificCert,
+    });
   } catch (error) {
     return res.json({
       message: "Internal server in verify cerificate",
@@ -193,3 +199,32 @@ module.exports.verifyCertificate = async (req, res, next) => {
     });
   }
 };
+
+module.exports.getAllComplaints=async(req,res)=>{
+  try{
+    const complaintDetails=await complaintModel.find({})
+    if(complaintDetails){
+      return res.json({message:"Success",Data:complaintDetails,status:true})
+    }else{
+      return res.json({message:"No Complaint Found",status:false})
+    }
+
+  }catch(error){
+    return res.json({message:"Internal server error in get all complaints",status:false})
+  }
+}
+
+
+module.exports.fetchSpecificComplaint=async(req,res)=>{
+  try{
+    const complaintId=req.params.id
+    const complaintData=await complaintModel.find({_id:complaintId})
+    if(complaintData){
+      return res.json({message:"Success",data:complaintData,status:true})
+    }else{
+      return res.json({message:"Unable to fetch",status:false})
+    }
+  }catch(error){
+    return res.json({message:"Internal server error in fetch specific complaint",status:false})
+  }
+}
