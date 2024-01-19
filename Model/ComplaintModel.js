@@ -5,6 +5,11 @@ const ComplaintSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  ownerId:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+    required:true
+  },
   wardnumber: {
     type: String,
     required: true,

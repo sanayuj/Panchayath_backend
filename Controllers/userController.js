@@ -109,6 +109,7 @@ module.exports.Complaint = async (req, res, next) => {
       email: req.body.email,
       complaintTopic: req.body.complaintTopic,
       complaintDescription: req.body.complaintDescription,
+      ownerId:req.body.userId
     });
 
     await newComplaint.save();
@@ -205,3 +206,16 @@ module.exports.viewBrithCertDetails = async (req, res, next) => {
     });
   }
 };
+
+module.exports.viewComplaintStatus=async(req,res)=>{
+  try{
+ const userId=req.params.Id;
+ console.log(userId,"??????)))))?????");
+ const complaintDetails=await complaintModel.find({ownerId:userId})
+ console.log(complaintDetails,"-=-=-=-=-");
+ return res.json({message:"Success",status:true,Details:complaintDetails})
+  }catch(error){
+    console.log(error);
+    return res.json({message:"Internal server error in view Complaint status",status:false})
+  }
+}
