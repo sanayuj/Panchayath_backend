@@ -228,3 +228,19 @@ module.exports.fetchSpecificComplaint=async(req,res)=>{
     return res.json({message:"Internal server error in fetch specific complaint",status:false})
   }
 }
+
+module.exports.changeComplantStatus=async(req,res)=>{
+  try{
+    const Id=req.params.id
+    console.log(Id,"PPPPPPP");
+    const updatedComplaint = await complaintModel.findByIdAndUpdate(
+      Id,
+      { $set: { complaintStatus: true } },
+      { new: true }
+    );
+    await res.json({message:"Verified",Details:updatedComplaint,status:true})
+
+  }catch(error){
+    console.log(error);
+  }
+}
