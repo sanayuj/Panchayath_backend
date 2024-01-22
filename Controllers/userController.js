@@ -7,6 +7,7 @@ const maxAge = 3 * 24 * 60 * 60;
 const bcrypt = require("bcrypt");
 const path = require("path");
 const certRequirementModel = require("../Model/certRequirementModel");
+const projectModel=require("../Model/projectModel")
 
 //JWT
 const createToken = (id) => {
@@ -221,5 +222,18 @@ module.exports.viewComplaintStatus=async(req,res)=>{
   }catch(error){
     console.log(error);
     return res.json({message:"Internal server error in view Complaint status",status:false})
+  }
+}
+
+module.exports.fetchAllProject=async(req,res)=>{
+  try{
+    const data=await projectModel.find({})
+    if(data){
+      return res.json({message:"Project found",status:true,data})
+    }else{
+      return res.json({message:"No Project found",status:false})
+    }
+  }catch(err){
+    return res.json({message:"Internal server error in fetch project",status:false})
   }
 }
