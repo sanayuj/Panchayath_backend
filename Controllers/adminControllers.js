@@ -7,6 +7,10 @@ const certificateModel = require("../Model/certificateModel");
 const certRequirementModel = require("../Model/certRequirementModel");
 const appliedBrithCertModel = require("../Model/appliedCertModel");
 const complaintModel = require("../Model/ComplaintModel");
+const projectModel=require("../Model/projectModel")
+const path = require("path");
+const { log } = require("console");
+
 const createAdminToken = (id) => {
   return jwt.sign({ id }, "adminJWT", {
     expiresIn: maxAge,
@@ -242,5 +246,34 @@ module.exports.changeComplantStatus=async(req,res)=>{
 
   }catch(error){
     console.log(error);
+  }
+}
+
+module.exports.addProjectDetails=async(req,res,next)=>{
+const {date,projectName,projectDescription,Website}=req.body
+
+  try{
+    const extractImageUrl = (fullPath) => {
+      const relativePath = path.relative("public/images", fullPath);
+      const imageUrl = relativePath.replace(/\\/g, "/");
+      return imageUrl;
+    };
+
+    console.log(req.file);
+
+    const projectDetails=new projectModel({
+      Date:date,
+      projectName:projectName,
+      projectDescription:projectDescription,
+      website:Website,
+      projectImage:extractImageUrl(req.file.path)
+    })
+
+    await projectDetails.save()
+    return res.json({message:"Submitted Successfully",status:true})
+
+  }catch(error){
+    console.log(error,"(((((");
+    return res.json({message:"Internal server error in add project",status:false})
   }
 }

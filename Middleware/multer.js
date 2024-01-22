@@ -7,6 +7,7 @@ const createMulterInstance = (folderName) => {
       cb(null, `public/images/${folderName}`);
     },
     filename: (req, file, cb) => {
+      console.log("&&&&&&8888877&&&&&");
       const originalname = path.parse(file.originalname);
       cb(null, `${originalname.name}_${Date.now()}${originalname.ext}`);
     },
