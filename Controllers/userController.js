@@ -237,3 +237,16 @@ module.exports.fetchAllProject=async(req,res)=>{
     return res.json({message:"Internal server error in fetch project",status:false})
   }
 }
+
+
+module.exports.uploadMarriageDetails=async(req,res)=>{
+ 
+  try{
+    console.log(req.body,"&&&&&");
+    console.log(req.files,"++++++");
+
+  }catch(error){
+    console.log(error);
+    res.json({error,status:false})
+  }
+}
