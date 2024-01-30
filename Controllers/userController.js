@@ -1,14 +1,14 @@
-const userModel = require("../Model/userModel");
-const complaintModel = require("../Model/ComplaintModel");
-const appliedCertModel = require("../Model/appliedCertModel");
 const { json, response } = require("express");
 const jwt = require("jsonwebtoken");
 const maxAge = 3 * 24 * 60 * 60;
 const bcrypt = require("bcrypt");
 const path = require("path");
+const userModel = require("../Model/userModel");
+const complaintModel = require("../Model/ComplaintModel");
+const appliedCertModel = require("../Model/appliedCertModel");
 const certRequirementModel = require("../Model/certRequirementModel");
-const projectModel=require("../Model/projectModel")
-
+const projectModel = require("../Model/projectModel");
+const marriageDetailsModel=require("../Model/marriageCertModel")
 //JWT
 const createToken = (id) => {
   return jwt.sign({ id }, "JWT", {
@@ -60,8 +60,11 @@ module.exports.login = async (req, res, next) => {
   try {
     const user = await userModel.findOne({ phoneNumber });
 
-    if(user.BlockStatus){
-      return res.json({message:"Admin temporay blocked you!",success:false})
+    if (user.BlockStatus) {
+      return res.json({
+        message: "Admin temporay blocked you!",
+        success: false,
+      });
     }
 
     if (user) {
@@ -114,7 +117,7 @@ module.exports.Complaint = async (req, res, next) => {
       email: req.body.email,
       complaintTopic: req.body.complaintTopic,
       complaintDescription: req.body.complaintDescription,
-      ownerId:req.body.userId
+      ownerId: req.body.userId,
     });
 
     await newComplaint.save();
@@ -131,7 +134,6 @@ module.exports.Complaint = async (req, res, next) => {
 module.exports.fetchSelectedCertDetails = async (req, res, next) => {
   try {
     const certificateId = req.params.certId;
-    console.log(certificateId,"@@@");
     const certificateDetails = await certRequirementModel.find({
       certificateId,
     });
@@ -146,8 +148,6 @@ module.exports.fetchSelectedCertDetails = async (req, res, next) => {
 
 module.exports.applyCertificate = async (req, res, next) => {
   try {
-    
-    
     console.log(req.body, "$$$");
     const extractImageUrl = (fullPath) => {
       const relativePath = path.relative("public/images", fullPath);
@@ -156,8 +156,8 @@ module.exports.applyCertificate = async (req, res, next) => {
     };
     const appliedCert = new appliedCertModel({
       dob: req.body.dateOfBrith,
-      childName:req.body.childName,
-      hospitalName:req.body.hospitalName,
+      childName: req.body.childName,
+      hospitalName: req.body.hospitalName,
       nameOfFather: req.body.nameOfFather,
       nameOfMother: req.body.nameOfMother,
       address: req.body.permanentAddress,
@@ -180,28 +180,30 @@ module.exports.applyCertificate = async (req, res, next) => {
   }
 };
 
-
-module.exports.fetchUserAppliedCert=async(req,res,next)=>{
-  try{
-    const userId=req.params.userId
-    console.log(userId,"%%%%%&&&&&");
-    const userCert=await appliedCertModel.find({userId:userId})
-    if(userCert){
-      return res.json({data:userCert,status:true})
-    }else{
-      return res.json({status:false,message:"No certificate found"})
+module.exports.fetchUserAppliedCert = async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    console.log(userId, "%%%%%&&&&&");
+    const userCert = await appliedCertModel.find({ userId: userId });
+    if (userCert) {
+      return res.json({ data: userCert, status: true });
+    } else {
+      return res.json({ status: false, message: "No certificate found" });
     }
-  }catch(error){
+  } catch (error) {
     console.log(error);
-    return res.json({message:"Internal server error in applied user cert",status:false})
+    return res.json({
+      message: "Internal server error in applied user cert",
+      status: false,
+    });
   }
-}
+};
 
 module.exports.viewBrithCertDetails = async (req, res, next) => {
   try {
     const certificateId = req.params.certId;
     const certificateDetails = await appliedCertModel.find({
-      _id:certificateId
+      _id: certificateId,
     });
     return res.json({ status: true, certDetails: certificateDetails });
   } catch (error) {
@@ -212,41 +214,82 @@ module.exports.viewBrithCertDetails = async (req, res, next) => {
   }
 };
 
-module.exports.viewComplaintStatus=async(req,res)=>{
-  try{
- const userId=req.params.Id;
- console.log(userId,"??????)))))?????");
- const complaintDetails=await complaintModel.find({ownerId:userId})
- console.log(complaintDetails,"-=-=-=-=-");
- return res.json({message:"Success",status:true,Details:complaintDetails})
-  }catch(error){
+module.exports.viewComplaintStatus = async (req, res) => {
+  try {
+    const userId = req.params.Id;
+    console.log(userId, "??????)))))?????");
+    const complaintDetails = await complaintModel.find({ ownerId: userId });
+    console.log(complaintDetails, "-=-=-=-=-");
+    return res.json({
+      message: "Success",
+      status: true,
+      Details: complaintDetails,
+    });
+  } catch (error) {
     console.log(error);
-    return res.json({message:"Internal server error in view Complaint status",status:false})
+    return res.json({
+      message: "Internal server error in view Complaint status",
+      status: false,
+    });
   }
-}
+};
 
-module.exports.fetchAllProject=async(req,res)=>{
-  try{
-    const data=await projectModel.find({})
-    if(data){
-      return res.json({message:"Project found",status:true,data})
-    }else{
-      return res.json({message:"No Project found",status:false})
+module.exports.fetchAllProject = async (req, res) => {
+  try {
+    const data = await projectModel.find({});
+    if (data) {
+      return res.json({ message: "Project found", status: true, data });
+    } else {
+      return res.json({ message: "No Project found", status: false });
     }
-  }catch(err){
-    return res.json({message:"Internal server error in fetch project",status:false})
+  } catch (err) {
+    return res.json({
+      message: "Internal server error in fetch project",
+      status: false,
+    });
   }
-}
+};
 
+module.exports.uploadMarriageDetails = async (req, res) => {
+  try {
+    const extractImageUrl = (fullPath) => {
+      const relativePath = path.relative("public/images", fullPath);
+      const imageUrl = relativePath.replace(/\\/g, "/");
+      return imageUrl;
+    };
 
-module.exports.uploadMarriageDetails=async(req,res)=>{
- 
-  try{
-    console.log(req.body,"&&&&&");
-    console.log(req.files,"++++++");
+    console.log(req.body, "&&&&&");
+    console.log(req.files, "++++++");
 
-  }catch(error){
+    const wifeAadharPath=req.files.WifeAadharImage.map(file => file.path)
+    const wifeImagePath=req.files.WifeImage.map(file => file.path)
+    const husbandAadharPath=req.files.HusAadharImage.map(file => file.path)
+    const husbandImagePath=req.files.HusbandImage.map(file => file.path)
+
+    const newMarriageCertDetails = new marriageDetailsModel({
+      userId: req.body.userId,
+      dateOfMarriage:req.body.DateOfMarriage,
+      placeOfMarriage:req.body.PlaceOfMarriage,
+      husbandName:req.body.HusbandName,
+      husbandNationality:req.body.HusbandNationality,
+      husbandDOB:req.body.HusbandDateOfBrith,
+      husbandAddress:req.body.HusbandAddress,
+      husMaritalStatus:req.body.HusbandPreviousMaritalStatus,
+      wifeName:req.body.WifeName,
+      wifeNationality:req.body.WifeNationality,
+      wifeDOB:req.body.WifeDateOfBrith,
+      wifeAddress:req.body.WifeAddress,
+      wifeMaritalStatus:req.body.WifePreviousMaritalStatus,
+      wifeAadhar:extractImageUrl(wifeAadharPath[0]),
+      wifeImage: extractImageUrl(wifeImagePath[0]),
+      husbandAadhar:extractImageUrl( husbandAadharPath[0]), 
+      husbandImage: extractImageUrl(husbandImagePath[0])
+});
+
+await newMarriageCertDetails.save()
+return res.json({message:"Submitted Successfully",status:true})
+  } catch (error) {
     console.log(error);
-    res.json({error,status:false})
+    res.json({ error, status: false });
   }
-}
+};
