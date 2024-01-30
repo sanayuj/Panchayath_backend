@@ -258,9 +258,6 @@ module.exports.uploadMarriageDetails = async (req, res) => {
       return imageUrl;
     };
 
-    console.log(req.body, "&&&&&");
-    console.log(req.files, "++++++");
-
     const wifeAadharPath=req.files.WifeAadharImage.map(file => file.path)
     const wifeImagePath=req.files.WifeImage.map(file => file.path)
     const husbandAadharPath=req.files.HusAadharImage.map(file => file.path)
@@ -293,3 +290,19 @@ return res.json({message:"Submitted Successfully",status:true})
     res.json({ error, status: false });
   }
 };
+
+
+module.exports.fetchAllAppliedMarriageCert=async(req,res)=>{
+  try{
+    const userId=req.params.userId;
+    const marriageCert=await marriageDetailsModel.find({userId:userId})
+    if(marriageCert){
+      return res.json({message:"Succes",status:true,data:marriageCert})
+    }else{
+      return res.json({message:"Failed",status:false})
+    }
+
+  }catch(error){
+    return res.json({message:"Internal server error",status:false})
+  }
+}

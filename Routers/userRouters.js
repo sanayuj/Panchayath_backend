@@ -12,6 +12,7 @@ const {
   viewComplaintStatus,
   fetchAllProject,
   uploadMarriageDetails,
+  fetchAllAppliedMarriageCert,
 } = require("../Controllers/userController");
 const userAuth = require("../Middleware/userAuth");
 const createMulterInstance = require("../Middleware/multer");
@@ -50,8 +51,10 @@ router.post(
 router.get("/userheader", userAuth, userHeader);
 router.get("/fetchAllCertificate", fetchAllCertificate);
 router.get("/fetchCertRequiredDetails/:certId", fetchSelectedCertDetails);
-router.get(`/fetchUserAppliedCert/:userId`, userAuth, fetchUserAppliedCert);
-router.get(`/fetchBrithCert/:certId`, userAuth, viewBrithCertDetails);
-router.get(`/viewcomplantStatus/:Id`, userAuth, viewComplaintStatus);
+router.get("/fetchUserAppliedCert/:userId", userAuth, fetchUserAppliedCert);
+router.get("/fetchBrithCert/:certId", userAuth, viewBrithCertDetails);
+router.get("/viewcomplantStatus/:Id", userAuth, viewComplaintStatus);
 router.get("/fetchprojectDetails", fetchAllProject);
+router.get("/fetchmarriageCert/:userId",userAuth,fetchAllAppliedMarriageCert)
+
 module.exports = router;
