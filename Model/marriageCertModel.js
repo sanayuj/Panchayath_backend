@@ -10,6 +10,10 @@ const marriageCertDetailsSchema=new mongoose.Schema({
         ref: "user",
         required: true,
       },
+      certName:{
+        type:String,
+        default:"Marriage Certificate"
+      },
       certStatus: {
         type: Boolean,
         default: false,

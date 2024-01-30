@@ -7,7 +7,8 @@ const certificateModel = require("../Model/certificateModel");
 const certRequirementModel = require("../Model/certRequirementModel");
 const appliedBrithCertModel = require("../Model/appliedCertModel");
 const complaintModel = require("../Model/ComplaintModel");
-const projectModel=require("../Model/projectModel")
+const projectModel = require("../Model/projectModel");
+const marriageCertModel = require("../Model/marriageCertModel");
 const path = require("path");
 const { log } = require("console");
 
@@ -71,9 +72,7 @@ module.exports.userList = async (req, res, next) => {
 module.exports.blockuser = async (req, res, next) => {
   try {
     const userId = req.params.userId;
-    console.log(userId, "Hiii");
     const userDetails = await userModel.findById(userId);
-    console.log(userDetails, "===");
 
     userDetails.BlockStatus = !userDetails.BlockStatus;
     await userDetails.save();
@@ -204,55 +203,69 @@ module.exports.verifyCertificate = async (req, res, next) => {
   }
 };
 
-module.exports.getAllComplaints=async(req,res)=>{
-  try{
-    const complaintDetails=await complaintModel.find({})
-    if(complaintDetails){
-      return res.json({message:"Success",Data:complaintDetails,status:true})
-    }else{
-      return res.json({message:"No Complaint Found",status:false})
+module.exports.getAllComplaints = async (req, res) => {
+  try {
+    const complaintDetails = await complaintModel.find({});
+    if (complaintDetails) {
+      return res.json({
+        message: "Success",
+        Data: complaintDetails,
+        status: true,
+      });
+    } else {
+      return res.json({ message: "No Complaint Found", status: false });
     }
-
-  }catch(error){
-    return res.json({message:"Internal server error in get all complaints",status:false})
+  } catch (error) {
+    return res.json({
+      message: "Internal server error in get all complaints",
+      status: false,
+    });
   }
-}
+};
 
-
-module.exports.fetchSpecificComplaint=async(req,res)=>{
-  try{
-    const complaintId=req.params.id
-    const complaintData=await complaintModel.find({_id:complaintId})
-    if(complaintData){
-      return res.json({message:"Success",data:complaintData,status:true})
-    }else{
-      return res.json({message:"Unable to fetch",status:false})
+module.exports.fetchSpecificComplaint = async (req, res) => {
+  try {
+    const complaintId = req.params.id;
+    const complaintData = await complaintModel.find({ _id: complaintId });
+    if (complaintData) {
+      return res.json({
+        message: "Success",
+        data: complaintData,
+        status: true,
+      });
+    } else {
+      return res.json({ message: "Unable to fetch", status: false });
     }
-  }catch(error){
-    return res.json({message:"Internal server error in fetch specific complaint",status:false})
+  } catch (error) {
+    return res.json({
+      message: "Internal server error in fetch specific complaint",
+      status: false,
+    });
   }
-}
+};
 
-module.exports.changeComplantStatus=async(req,res)=>{
-  try{
-    const Id=req.params.id
-    console.log(Id,"PPPPPPP");
+module.exports.changeComplantStatus = async (req, res) => {
+  try {
+    const Id = req.params.id;
     const updatedComplaint = await complaintModel.findByIdAndUpdate(
       Id,
       { $set: { complaintStatus: true } },
       { new: true }
     );
-    await res.json({message:"Verified",Details:updatedComplaint,status:true})
-
-  }catch(error){
+    await res.json({
+      message: "Verified",
+      Details: updatedComplaint,
+      status: true,
+    });
+  } catch (error) {
     console.log(error);
   }
-}
+};
 
-module.exports.addProjectDetails=async(req,res,next)=>{
-const {date,projectName,projectDescription,Website}=req.body
+module.exports.addProjectDetails = async (req, res, next) => {
+  const { date, projectName, projectDescription, Website } = req.body;
 
-  try{
+  try {
     const extractImageUrl = (fullPath) => {
       const relativePath = path.relative("public/images", fullPath);
       const imageUrl = relativePath.replace(/\\/g, "/");
@@ -261,19 +274,96 @@ const {date,projectName,projectDescription,Website}=req.body
 
     console.log(req.file);
 
-    const projectDetails=new projectModel({
-      Date:date,
-      projectName:projectName,
-      projectDescription:projectDescription,
-      website:Website,
-      projectImage:extractImageUrl(req.file.path)
+    const projectDetails = new projectModel({
+      Date: date,
+      projectName: projectName,
+      projectDescription: projectDescription,
+      website: Website,
+      projectImage: extractImageUrl(req.file.path),
+    });
+
+    await projectDetails.save();
+    return res.json({ message: "Submitted Successfully", status: true });
+  } catch (error) {
+    return res.json({
+      message: "Internal server error in add project",
+      status: false,
+    });
+  }
+};
+
+module.exports.fetchAllMarriageCert = async (req, res, next) => {
+  try {
+    const appliedMarriageCert = await marriageCertModel.find();
+    if (appliedMarriageCert) {
+      return res.json({
+        message: "Cert Found",
+        status: true,
+        data: appliedMarriageCert,
+      });
+    } else {
+      return res.json({
+        message: "No Applied Marriage certificate found",
+        status: false,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({
+      message: "Internal server error in fetch all cert",
+      status: false,
+    });
+  }
+};
+
+module.exports.fetchSpecificMarriage = async (req, res, next) => {
+  try {
+    const Id = req.params.id;
+    const marriageCertDetails = await marriageCertModel.find({ _id: Id }).populate({
+      path: "userId",
+      model: "user",
+      select: "userName email username",
+    });;
+    if (marriageCertDetails) {
+      return res.json({
+        message: "Fetched successfully",
+        status: true,
+        data: marriageCertDetails,
+      });
+    } else {
+      return res.json({ message: "No Certificate found", status: false });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.json({ message: "Internal server error", status: false });
+  }
+};
+
+
+
+module.exports.verifyMarriageCert=async(req,res,next)=>{
+  try{
+    const userId = req.params.userId;
+    const certId = req.params.certId;
+    const specificCert = await marriageCertModel.find({
+      userId: userId,
+      _id: certId,
+    });
+    console.log(specificCert, "**");
+
+    if (specificCert) {
+      await marriageCertModel.updateOne(
+        { _id: certId },
+        { $set: { certStatus: true } }
+      );
+    }
+    return res.json({
+      message: "Verified successfully",
+      status: true,
+      details: specificCert,
     })
 
-    await projectDetails.save()
-    return res.json({message:"Submitted Successfully",status:true})
-
   }catch(error){
-    console.log(error,"(((((");
-    return res.json({message:"Internal server error in add project",status:false})
+
   }
 }
