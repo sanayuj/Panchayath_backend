@@ -183,7 +183,6 @@ module.exports.applyCertificate = async (req, res, next) => {
 module.exports.fetchUserAppliedCert = async (req, res, next) => {
   try {
     const userId = req.params.userId;
-    console.log(userId, "%%%%%&&&&&");
     const userCert = await appliedCertModel.find({ userId: userId });
     if (userCert) {
       return res.json({ data: userCert, status: true });
@@ -217,9 +216,7 @@ module.exports.viewBrithCertDetails = async (req, res, next) => {
 module.exports.viewComplaintStatus = async (req, res) => {
   try {
     const userId = req.params.Id;
-    console.log(userId, "??????)))))?????");
     const complaintDetails = await complaintModel.find({ ownerId: userId });
-    console.log(complaintDetails, "-=-=-=-=-");
     return res.json({
       message: "Success",
       status: true,
