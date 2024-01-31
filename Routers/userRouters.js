@@ -13,6 +13,7 @@ const {
   fetchAllProject,
   uploadMarriageDetails,
   fetchAllAppliedMarriageCert,
+  fetchSpecificMarriageCert,
 } = require("../Controllers/userController");
 const userAuth = require("../Middleware/userAuth");
 const createMulterInstance = require("../Middleware/multer");
@@ -56,5 +57,6 @@ router.get("/fetchBrithCert/:certId", userAuth, viewBrithCertDetails);
 router.get("/viewcomplantStatus/:Id", userAuth, viewComplaintStatus);
 router.get("/fetchprojectDetails", fetchAllProject);
 router.get("/fetchmarriageCert/:userId",userAuth,fetchAllAppliedMarriageCert)
+router.get("/fetchspecificmarriagecert/:certId/:userId",userAuth,fetchSpecificMarriageCert)
 
 module.exports = router;

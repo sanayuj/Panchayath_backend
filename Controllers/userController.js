@@ -306,3 +306,19 @@ module.exports.fetchAllAppliedMarriageCert=async(req,res)=>{
     return res.json({message:"Internal server error",status:false})
   }
 }
+
+module.exports.fetchSpecificMarriageCert=async(req,res)=>{
+  try {
+    const userId=req.params.userId;
+    const certId=req.params.certId;
+    const marriageCertDetails=await marriageDetailsModel.find({userId:userId,_id:certId})
+    if(marriageCertDetails){
+      return res.json({message:"Success",status:true,data:marriageCertDetails})
+    }else{
+      return res.json({message:"Failed to fetch",status:false})
+    }
+    
+  } catch (error) {
+    return res.json({message:"Internal server error in fetch marrriage cert",status:false})
+  }
+}
